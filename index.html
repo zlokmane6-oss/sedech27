@@ -944,11 +944,12 @@ nav .wrap{flex-wrap:wrap}
       <p>Conference secretariat, ERTE team, STIS research centre<br>ENSAM Rabat, Mohammed V University in Rabat, Morocco</p>
       <p>E-mail: <a href="mailto:contact.sedech27@gmail.com">contact.sedech27@gmail.com</a></p>
     </div>
-    <form id="cf">
-      <label for="cf-name">Name<input id="cf-name" required></label>
-      <label for="cf-mail">E-mail<input id="cf-mail" type="email" required></label>
-      <label for="cf-text">Message<textarea id="cf-text" rows="4" required></textarea></label>
-      <div><button class="btn" type="submit">Prepare e-mail</button></div>
+    <form id="cf" novalidate>
+      <label for="cf-name">Name<input id="cf-name" name="name" autocomplete="name" required></label>
+      <label for="cf-mail">E-mail<input id="cf-mail" name="email" type="email" autocomplete="email" required></label>
+      <label for="cf-text">Message<textarea id="cf-text" name="message" rows="4" required></textarea></label>
+      <input type="text" name="_honey" id="cf-honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <div><button class="btn" type="submit" id="cf-btn">Send message</button></div>
       <p id="msg" role="status"></p>
     </form>
   </div>
@@ -977,13 +978,31 @@ const SHOW_PUBLISHER_LOGO = false; // set to true once Springer has accepted the
 {
   const f = document.getElementById('cf');
   const m = document.getElementById('msg');
-  f.addEventListener('submit', e => {
+  const btn = document.getElementById('cf-btn');
+  const TO = 'contact.sedech27@gmail.com';
+  const show = (t, ok) => { m.textContent = t; m.style.color = ok ? '#c8f7d4' : '#ffd9d6'; };
+  f.addEventListener('submit', async e => {
     e.preventDefault();
     const n = document.getElementById('cf-name').value.trim();
+    const mail = document.getElementById('cf-mail').value.trim();
     const t = document.getElementById('cf-text').value.trim();
-    const href = 'mailto:contact.sedech27@gmail.com?subject=' + encodeURIComponent("SEDECH’27 enquiry from " + n) + '&body=' + encodeURIComponent(t);
-    m.textContent = 'Your mail app should open. If not, write to contact.sedech27@gmail.com.';
-    const a = document.createElement('a'); a.href = href; a.target = '_blank'; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
+    if (document.getElementById('cf-honey').value) return;
+    if (!n || !t) return show('Please enter your name and your message.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return show('Please enter a valid e-mail address.');
+    btn.disabled = true; btn.textContent = 'Sending…'; show('', true);
+    try {
+      const r = await fetch('https://formsubmit.co/ajax/' + TO, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name: n, email: mail, message: t, _subject: 'SEDECH’27 – message from ' + n, _replyto: mail, _template: 'table' })
+      });
+      const d = await r.json().catch(() => ({}));
+      if (r.ok && String(d.success) === 'true') { f.reset(); show('Thank you! Your message has been sent. We will reply to ' + mail + '.', true); }
+      else show('Your message could not be sent. Please write directly to ' + TO + '.');
+    } catch (err) {
+      show('Network error. Please try again or write directly to ' + TO + '.');
+    }
+    btn.disabled = false; btn.textContent = 'Send message';
   });
 }
 </script>
