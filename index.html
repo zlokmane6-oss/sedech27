@@ -1023,8 +1023,8 @@ const SHOW_PUBLISHER_LOGO = false; // set to true once Springer has accepted the
    To activate: create a free Supabase project, then paste its
    Project URL and anon public key below (see the setup guide).
    ================================================================ */
-const SUPABASE_URL = '';       // e.g. 'https://abcdxyz.supabase.co'
-const SUPABASE_ANON_KEY = '';  // e.g. 'eyJhbGciOi...'
+const SUPABASE_URL = 'https://keshjneqmcwguknypppw.supabase.co';       // e.g. 'https://abcdxyz.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_iVosjCn86ssrYAsYzeOpxw_sJxrMjAK';  // e.g. 'eyJhbGciOi...'
 {
   const $ = id => document.getElementById(id);
   const say = (el, txt, ok) => { el.textContent = txt; el.className = 'amsg ' + (ok ? 'ok' : 'err'); };
@@ -1084,7 +1084,7 @@ const SUPABASE_ANON_KEY = '';  // e.g. 'eyJhbGciOi...'
 
   if (SUPABASE_URL && SUPABASE_ANON_KEY) {
     const t = document.createElement('script');
-    t.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js';
+    t.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
     t.onload = () => {
       sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       sb.auth.getSession().then(({ data }) => showUser(data.session && data.session.user));
