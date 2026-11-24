@@ -202,6 +202,7 @@ nav .wrap{flex-wrap:wrap}
 .hc summary{cursor:pointer;font-weight:600;color:var(--blue2);min-height:32px;display:flex;align-items:center}
 .hc details p{font-size:15px;margin-top:6px}
 @media(min-width:760px){.co3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.cap{margin:6px 0 4px}.cap:empty{display:none}
 </style>
 </head>
 <body>
@@ -868,6 +869,7 @@ nav .wrap{flex-wrap:wrap}
           <label for="l-mail">E-mail<input id="l-mail" type="email" autocomplete="email" required></label>
           <label for="l-pass">Password<input id="l-pass" type="password" autocomplete="current-password" required></label>
           <button class="linkbtn" type="button" id="forgot">Forgot your password?</button>
+          <div class="cap" data-cap="login"></div>
           <div><button class="btn" type="submit">Log in</button></div>
           <p class="amsg" id="lmsg" role="status"></p>
           <p class="note" style="margin:0">No account yet? <button class="linkbtn" type="button" id="to-reg">Create an account</button></p>
@@ -876,6 +878,7 @@ nav .wrap{flex-wrap:wrap}
           <h3>Reset your password</h3>
           <p class="note" style="margin:0">Enter the e-mail of your account. We will send you a 6-digit code.</p>
           <label for="fp-mail">E-mail<input id="fp-mail" type="email" autocomplete="email" required></label>
+          <div class="cap" data-cap="forgot"></div>
           <div><button class="btn" type="submit">Send the code</button></div>
           <button class="linkbtn" type="button" id="fp-back">Back to log in</button>
           <p class="amsg" id="fpemsg" role="status"></p>
@@ -885,6 +888,7 @@ nav .wrap{flex-wrap:wrap}
           <p class="note" style="margin:0">We sent a 6-digit code to <strong id="fpmail"></strong>. Paste it below.</p>
           <label for="fp-code">Reset code<input id="fp-code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label>
           <div><button class="btn" type="submit">Verify the code</button></div>
+          <div class="cap" data-cap="fpresend"></div>
           <button class="linkbtn" type="button" id="fp-resend">Resend the code</button>
           <p class="amsg" id="fpcmsg" role="status"></p>
         </form>
@@ -906,6 +910,7 @@ nav .wrap{flex-wrap:wrap}
           <label for="r-mail">E-mail<input id="r-mail" type="email" autocomplete="email" required></label>
           <label for="r-pass">Password<input id="r-pass" type="password" autocomplete="new-password" minlength="8" required></label>
           <label for="r-pass2">Confirm password<input id="r-pass2" type="password" autocomplete="new-password" required></label>
+          <div class="cap" data-cap="reg"></div>
           <div><button class="btn" type="submit">Create account</button></div>
           <p class="amsg" id="rmsg" role="status"></p>
           <p class="note" style="margin:0">Already have an account? <button class="linkbtn" type="button" id="to-login">Log in</button></p>
@@ -915,6 +920,7 @@ nav .wrap{flex-wrap:wrap}
           <p class="note" style="margin:0">We sent a 6-digit code to <strong id="regmail"></strong>. Enter it below to activate your account.</p>
           <label for="rc-code">Confirmation code<input id="rc-code" class="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label>
           <div class="cta" style="margin:0"><button class="btn" type="submit">Confirm</button></div>
+          <div class="cap" data-cap="regresend"></div>
           <button class="linkbtn" type="button" id="rc-resend">Resend the code</button>
           <p class="amsg" id="rcmsg" role="status"></p>
         </form>
@@ -974,6 +980,7 @@ nav .wrap{flex-wrap:wrap}
       <label for="cf-mail">E-mail<input id="cf-mail" name="email" type="email" autocomplete="email" required></label>
       <label for="cf-text">Message<textarea id="cf-text" name="message" rows="4" required></textarea></label>
       <input type="text" name="_honey" id="cf-honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <div class="cap" data-cap="contact"></div>
       <div><button class="btn" type="submit" id="cf-btn">Send message</button></div>
       <p id="msg" role="status"></p>
     </form>
@@ -990,6 +997,25 @@ nav .wrap{flex-wrap:wrap}
   <div class="wrap small" style="margin-top:8px">The Microsoft CMT service was used for managing the peer-reviewing process for this conference. This service was provided for free by Microsoft and they bore all expenses, including costs for Azure cloud services as well as for software development and support.</div>
 </footer>
 
+<script>
+/* ---------- "I am not a robot" checkbox (hCaptcha) ----------
+   Paste the hCaptcha SITE KEY below. Empty = check switched off (the site works without it). */
+const HCAPTCHA_SITE_KEY = '5fe0ddd8-2cd4-4f7e-9b6c-823e1e8e6f3c';
+window.SEDCAP = {
+  on: !!HCAPTCHA_SITE_KEY, ids: {},
+  /* undefined = check off; '' = box not ticked yet; otherwise the token */
+  get(n) { if (!this.on) return undefined; try { return (window.hcaptcha && hcaptcha.getResponse(this.ids[n])) || ''; } catch (e) { return ''; } },
+  reset(n) { if (this.on && window.hcaptcha && this.ids[n] != null) { try { hcaptcha.reset(this.ids[n]); } catch (e) {} } },
+  MSG: 'Please tick the box "I am human" above the button.'
+};
+if (SEDCAP.on) {
+  window.sedcapLoad = () => document.querySelectorAll('[data-cap]').forEach(el => {
+    SEDCAP.ids[el.dataset.cap] = hcaptcha.render(el, { sitekey: HCAPTCHA_SITE_KEY, theme: 'light' });
+  });
+  const go = () => { const t = document.createElement('script'); t.src = 'https://js.hcaptcha.com/1/api.js?render=explicit&onload=sedcapLoad&hl=en'; t.async = true; document.head.appendChild(t); };
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', go) : go();
+}
+</script>
 <script>
 const SHOW_PUBLISHER_LOGO = false; // set to true once Springer has accepted the proceedings
 {
@@ -1014,6 +1040,7 @@ const SHOW_PUBLISHER_LOGO = false; // set to true once Springer has accepted the
     if (document.getElementById('cf-honey').value) return;
     if (!n || !t) return show('Please enter your name and your message.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) return show('Please enter a valid e-mail address.');
+    if (SEDCAP.get('contact') === '') return show(SEDCAP.MSG);
     btn.disabled = true; btn.textContent = 'Sending…'; show('', true);
     try {
       const r = await fetch('https://formsubmit.co/ajax/' + TO, {
@@ -1027,6 +1054,7 @@ const SHOW_PUBLISHER_LOGO = false; // set to true once Springer has accepted the
     } catch (err) {
       show('Network error. Please try again or write directly to ' + TO + '.');
     }
+    SEDCAP.reset('contact');
     btn.disabled = false; btn.textContent = 'Send message';
   });
 }
@@ -1122,7 +1150,9 @@ const SUPABASE_ANON_KEY = 'sb_publishable_iVosjCn86ssrYAsYzeOpxw_sJxrMjAK';  // 
       return view(REG, 'regc');
     }
     if (!sb) return say(m, OFF);
-    const { data, error } = await sb.auth.signUp({ email: mail, password: p, options: { data: { first_name: first, last_name: last } } });
+    const cap = SEDCAP.get('reg'); if (cap === '') return say(m, SEDCAP.MSG);
+    const { data, error } = await sb.auth.signUp({ email: mail, password: p, options: { data: { first_name: first, last_name: last }, captchaToken: cap } });
+    SEDCAP.reset('reg');
     if (error) return say(m, msgOf(error));
     if (data.user && data.user.identities && data.user.identities.length === 0) return say(m, 'An account already exists with this e-mail. Please log in.');
     regMail = mail; $('regmail').textContent = mail; clear('rmsg', 'rcmsg'); e.target.reset();
@@ -1152,7 +1182,9 @@ const SUPABASE_ANON_KEY = 'sb_publishable_iVosjCn86ssrYAsYzeOpxw_sJxrMjAK';  // 
     const m = $('rcmsg');
     if (DEMO) return say(m, '', true);
     if (!sb) return say(m, OFF);
-    const { error } = await sb.auth.resend({ type: 'signup', email: regMail });
+    const cap = SEDCAP.get('regresend'); if (cap === '') return say(m, SEDCAP.MSG);
+    const { error } = await sb.auth.resend({ type: 'signup', email: regMail, options: { captchaToken: cap } });
+    SEDCAP.reset('regresend');
     error ? say(m, msgOf(error)) : say(m, 'A new code has been sent to ' + regMail + '.', true);
   });
 
@@ -1166,7 +1198,9 @@ const SUPABASE_ANON_KEY = 'sb_publishable_iVosjCn86ssrYAsYzeOpxw_sJxrMjAK';  // 
       return say(m, 'Wrong e-mail or password.');
     }
     if (!sb) return say(m, OFF);
-    const { error } = await sb.auth.signInWithPassword({ email: mail, password: p });
+    const cap = SEDCAP.get('login'); if (cap === '') return say(m, SEDCAP.MSG);
+    const { error } = await sb.auth.signInWithPassword({ email: mail, password: p, options: { captchaToken: cap } });
+    SEDCAP.reset('login');
     if (!error) { e.target.reset(); clear('lmsg'); return; }
     if ((error.message || '').toLowerCase().includes('not confirmed')) {
       regMail = mail; $('regmail').textContent = mail;
@@ -1187,7 +1221,9 @@ const SUPABASE_ANON_KEY = 'sb_publishable_iVosjCn86ssrYAsYzeOpxw_sJxrMjAK';  // 
     if (!mailOk(mail)) return say(m, 'Please enter a valid e-mail address.');
     if (DEMO) { fpMail = mail; $('fpmail').textContent = mail; clear('fpcmsg'); return view(LOG, 'fpc'); }
     if (!sb) return say(m, OFF);
-    const { error } = await sb.auth.resetPasswordForEmail(mail);
+    const cap = SEDCAP.get('forgot'); if (cap === '') return say(m, SEDCAP.MSG);
+    const { error } = await sb.auth.resetPasswordForEmail(mail, { captchaToken: cap });
+    SEDCAP.reset('forgot');
     if (error) return say(m, msgOf(error));
     fpMail = mail; $('fpmail').textContent = mail; clear('fpcmsg');
     view(LOG, 'fpc');
@@ -1197,7 +1233,9 @@ const SUPABASE_ANON_KEY = 'sb_publishable_iVosjCn86ssrYAsYzeOpxw_sJxrMjAK';  // 
     const m = $('fpcmsg');
     if (DEMO) return say(m, '', true);
     if (!sb) return say(m, OFF);
-    const { error } = await sb.auth.resetPasswordForEmail(fpMail);
+    const cap = SEDCAP.get('fpresend'); if (cap === '') return say(m, SEDCAP.MSG);
+    const { error } = await sb.auth.resetPasswordForEmail(fpMail, { captchaToken: cap });
+    SEDCAP.reset('fpresend');
     error ? say(m, msgOf(error)) : say(m, 'A new code has been sent to ' + fpMail + '.', true);
   });
 
