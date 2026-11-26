@@ -145,6 +145,7 @@ footer h2::before{background:#ffb8b2}
 .flinks{display:grid;grid-template-columns:repeat(2,minmax(0,auto));gap:6px 28px}
 .flinks a{color:#dfe5ff;text-decoration:none;font-weight:600;min-height:32px;display:flex;align-items:center}
 .flinks a:hover{color:#fff;text-decoration:underline}
+.phdlist{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(14em,1fr));gap:10px}.phdlist li{padding:10px 14px;border:1px solid rgba(127,127,127,.3);border-radius:10px;font-weight:600}
 .orgbar{display:flex;align-items:center;justify-content:center;gap:18px 28px;flex-wrap:wrap;margin-top:28px;padding:18px 0;border-top:1px solid rgba(255,255,255,.25)}.orgbar-t{color:#c6d0ff;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}.orgbar-logos{display:flex;align-items:center;gap:28px}.orgbar-logos a{display:flex;align-items:center;min-height:44px;opacity:.9}.orgbar-logos a:hover{opacity:1}.orgbar-logos img{display:block;height:54px;width:auto}
 #totop{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;border:0;background:var(--red);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .2s}
 #totop.on{opacity:1;pointer-events:auto}
@@ -605,7 +606,7 @@ nav .wrap{flex-wrap:wrap}
 <section class="band page" id="organizing">
   <div class="wrap">
     <h2>Organizing committee</h2>
-    <p class="lead">30 members: 7 from abroad and 23 from Moroccan institutions.</p>
+    <p class="lead">36 members: 7 international, 17 national and 12 local (ENSAM Rabat), supported by a committee of 11 PhD students.</p>
     <h3 style="margin:8px 0 12px">International organizing committee</h3>
     <div class="scroll">
       <table class="stack">
@@ -631,16 +632,10 @@ nav .wrap{flex-wrap:wrap}
           <tr><td>Youssef Mejdoub</td><td>EST Casablanca, Hassan II University of Casablanca, Morocco</td><td></td></tr>
           <tr><td>Said Agoujil</td><td>ENCG, Moulay Ismail University, Morocco</td><td></td></tr>
           <tr><td>Ahmad El Allaoui</td><td>FST Errachidia, Moulay Ismail University, Morocco</td><td></td></tr>
-          <tr><td>Said Ziani</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Ahmed Bir-jmel</td><td>Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Atman Jbari</td><td>Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Abdelilah Jilbab</td><td>Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Malika Zazi</td><td>Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Benba Achraf</td><td>Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Ahmed Essadki</td><td>Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Mohammed El Ghmary</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td><td></td></tr>
+          <tr><td>Hafid Ben Achour</td><td>FST Errachidia, Moulay Ismail University, Morocco</td><td></td></tr>
+          <tr><td>Youssef Chaou</td><td>FST Errachidia, Moulay Ismail University, Morocco</td><td></td></tr>
+          <tr><td>Aimad Laabab</td><td>FST Errachidia, Moulay Ismail University, Morocco</td><td></td></tr>
           <tr><td>Ali Ouacha</td><td>Faculty of Sciences, Mohammed V University in Rabat, Morocco</td><td></td></tr>
-          <tr><td>Amine Sbitti</td><td>Mohammed V University in Rabat, Morocco</td><td></td></tr>
           <tr><td>Redouane Assoudi</td><td>Moulay Ismail University, Meknes, Morocco</td><td>Fluid mechanics</td></tr>
           <tr><td>Lahcen Bammou</td><td>Ibn Zohr University, Agadir, Morocco</td><td>Fluid mechanics</td></tr>
           <tr><td>Abdelouahad Ait Msaad</td><td>Sidi Mohamed Ben Abdellah University, Fez, Morocco</td><td>Fluid mechanics, energy</td></tr>
@@ -652,6 +647,40 @@ nav .wrap{flex-wrap:wrap}
         </tbody>
       </table>
     </div>
+    <h3 style="margin:36px 0 12px">Local organizing committee (ENSAM Rabat)</h3>
+    <div class="scroll">
+      <table class="stack">
+        <thead><tr><th>Name</th><th>Affiliation</th></tr></thead>
+        <tbody>
+          <tr><td>Said Ziani</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Brahim Benaji</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Ahmed Bir-jmel</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Ahmed Essadki</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Achraf Benba</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Amine Sbitti</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Mohammed El Ghmary</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Benayad Nsiri</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Atman Jbari</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Abdellah Salmi</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Latifa Doudach</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+          <tr><td>Malika Zazi</td><td>ENSAM Rabat, Mohammed V University in Rabat, Morocco</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 style="margin:36px 0 12px">PhD students committee</h3>
+    <ul class="phdlist">
+      <li>Marouan Ben El Haj</li>
+      <li>Ilham Dammari</li>
+      <li>Oumaima Mejdoubi</li>
+      <li>Rachid Derouich</li>
+      <li>Hamza El Bakkali</li>
+      <li>Chaimae Alahiane</li>
+      <li>Rihane Mouden</li>
+      <li>Hiba Harchaoui</li>
+      <li>Sara Belhaj</li>
+      <li>Kenza Kayssouni</li>
+      <li>Abdeljalil Chegdali</li>
+    </ul>
   </div>
 </section>
 
