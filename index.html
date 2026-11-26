@@ -1026,8 +1026,8 @@ window.SEDCAP = {
 if (SEDCAP.on) {
   window.sedcapLoad = () => document.querySelectorAll('[data-cap]').forEach(el => {
     const n = el.dataset.cap;
-    const bar = document.createElement('div'); bar.className = 'caplang'; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Captcha language / Langue');
-    bar.innerHTML = '<span>Language / Langue :</span><button type="button" data-l="en">English</button><button type="button" data-l="fr">Français</button>';
+    const bar = document.createElement('div'); bar.className = 'caplang'; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Captcha language');
+    bar.innerHTML = '<span>Language:</span><button type="button" data-l="en">English</button><button type="button" data-l="fr">French</button>';
     bar.querySelectorAll('button').forEach(x => { x.setAttribute('aria-pressed', String(x.dataset.l === SEDCAP.lang)); x.addEventListener('click', () => SEDCAP.setLang(x.dataset.l)); });
     const box = document.createElement('div');
     el.appendChild(bar); el.appendChild(box);
