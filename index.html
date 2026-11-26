@@ -202,7 +202,7 @@ nav .wrap{flex-wrap:wrap}
 .hc summary{cursor:pointer;font-weight:600;color:var(--blue2);min-height:32px;display:flex;align-items:center}
 .hc details p{font-size:15px;margin-top:6px}
 @media(min-width:760px){.co3{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.cap{margin:6px 0 4px}.cap:empty{display:none}
+.cap{margin:6px 0 4px}.cap:empty{display:none}.caplang{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 6px;font-size:.85rem;color:inherit}.caplang button{font:inherit;font-size:.82rem;padding:4px 12px;min-height:32px;border-radius:999px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer;opacity:.75}.caplang button[aria-pressed="true"]{opacity:1;font-weight:700;background:rgba(127,127,127,.18)}
 </style>
 </head>
 <body>
@@ -1014,17 +1014,26 @@ nav .wrap{flex-wrap:wrap}
    Paste the hCaptcha SITE KEY below. Empty = check switched off (the site works without it). */
 const HCAPTCHA_SITE_KEY = '5fe0ddd8-2cd4-4f7e-9b6c-823e1e8e6f3c';
 window.SEDCAP = {
-  on: !!HCAPTCHA_SITE_KEY, ids: {},
+  on: !!HCAPTCHA_SITE_KEY, ids: {}, boxes: {},
+  lang: (() => { try { const l = localStorage.getItem('sedcapLang'); if (l === 'en' || l === 'fr') return l; } catch (e) {} return /^fr/i.test(navigator.language || '') ? 'fr' : 'en'; })(),
   /* undefined = check off; '' = box not ticked yet; otherwise the token */
   get(n) { if (!this.on) return undefined; try { return (window.hcaptcha && hcaptcha.getResponse(this.ids[n])) || ''; } catch (e) { return ''; } },
   reset(n) { if (this.on && window.hcaptcha && this.ids[n] != null) { try { hcaptcha.reset(this.ids[n]); } catch (e) {} } },
-  MSG: 'Please tick the box "I am human" above the button.'
+  get MSG() { return this.lang === 'fr' ? 'Veuillez cocher la case « Je suis humain » au-dessus du bouton.' : 'Please tick the box "I am human" above the button.'; },
+  draw(n) { const b = this.boxes[n]; if (!b) return; if (this.ids[n] != null) { try { hcaptcha.remove(this.ids[n]); } catch (e) {} } b.innerHTML = ''; this.ids[n] = hcaptcha.render(b, { sitekey: HCAPTCHA_SITE_KEY, theme: 'light', hl: this.lang }); },
+  setLang(l) { this.lang = l; try { localStorage.setItem('sedcapLang', l); } catch (e) {} document.querySelectorAll('.caplang button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.l === l))); Object.keys(this.boxes).forEach(n => this.draw(n)); }
 };
 if (SEDCAP.on) {
   window.sedcapLoad = () => document.querySelectorAll('[data-cap]').forEach(el => {
-    SEDCAP.ids[el.dataset.cap] = hcaptcha.render(el, { sitekey: HCAPTCHA_SITE_KEY, theme: 'light' });
+    const n = el.dataset.cap;
+    const bar = document.createElement('div'); bar.className = 'caplang'; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Captcha language / Langue');
+    bar.innerHTML = '<span>Language / Langue :</span><button type="button" data-l="en">English</button><button type="button" data-l="fr">Français</button>';
+    bar.querySelectorAll('button').forEach(x => { x.setAttribute('aria-pressed', String(x.dataset.l === SEDCAP.lang)); x.addEventListener('click', () => SEDCAP.setLang(x.dataset.l)); });
+    const box = document.createElement('div');
+    el.appendChild(bar); el.appendChild(box);
+    SEDCAP.boxes[n] = box; SEDCAP.draw(n);
   });
-  const go = () => { const t = document.createElement('script'); t.src = 'https://js.hcaptcha.com/1/api.js?render=explicit&onload=sedcapLoad&hl=en'; t.async = true; document.head.appendChild(t); };
+  const go = () => { const t = document.createElement('script'); t.src = 'https://js.hcaptcha.com/1/api.js?render=explicit&onload=sedcapLoad'; t.async = true; document.head.appendChild(t); };
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', go) : go();
 }
 </script>
